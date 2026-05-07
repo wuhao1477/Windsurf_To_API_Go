@@ -22,7 +22,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-COPY --from=web-builder /src/web/dist /src/internal/web/dist
+COPY --from=web-builder /src/internal/web/dist /src/internal/web/dist
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
     go build -trimpath -ldflags='-s -w' -o /out/windsurfapi ./cmd/windsurfapi
