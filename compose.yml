@@ -9,9 +9,9 @@ services:
     ports:
       - "3003:3003"
     volumes:
-      - ./.docker-data:/data
-      - windsurf-ls-data:/opt/windsurf/data
-      - windsurf-workspace:/tmp/windsurf-workspace
+      - ./.docker-data/data:/data
+      - ./.docker-data/opt/windsurf:/opt/windsurf
+      - ./.docker-data/tmp/windsurf-workspace:/tmp/windsurf-workspace
     restart: unless-stopped
 
 volumes:
