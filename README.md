@@ -59,6 +59,40 @@ local gRPC) plus its transitive `golang.org/x/text`.
 
 Dashboard: `http://<host>:<PORT>/dashboard`
 
+## Docker
+
+Container packaging is supported for **Linux amd64**.
+
+Build locally:
+
+```bash
+docker build -t windsurf-to-api-go .
+```
+
+Run locally:
+
+```bash
+docker run --platform=linux/amd64 \
+  -p 3003:3003 \
+  --env-file .env \
+  -v "$(pwd)/.docker-data:/data" \
+  -v windsurf-ls-data:/opt/windsurf/data \
+  -v windsurf-workspace:/tmp/windsurf-workspace \
+  ghcr.io/wuhao1477/windsurf-to-api-go:latest
+```
+
+Or use:
+
+```bash
+docker compose up -d --build
+```
+
+Notes:
+
+- The image downloads `language_server_linux_x64` during build, so Git LFS is not required for container builds.
+- Runtime state (`accounts.json`, `proxy.json`, `runtime-config.json`, `model-access.json`, `stats.json`, `logs/`) is stored under `/data`.
+- GitHub Actions publishes images to `ghcr.io/wuhao1477/windsurf-to-api-go`.
+
 ## Env
 
 Same names as the JS service — see `.env.example`. Load order: process env

@@ -2,6 +2,8 @@
 
 两种路径：**从源码编译**（推荐）或 **预编译二进制**。
 
+另提供 **Docker / Docker Compose** 部署方式，适合直接跑 Linux amd64 容器。
+
 ## 从源码编译
 
 ### 前置
@@ -67,6 +69,51 @@ cp .env.example .env
 ```
 
 看到 `Server on http://0.0.0.0:3003` 后，浏览器访问 `http://<主机 IP>:3003/dashboard` 完成首次登录与取号。
+
+## Docker 安装
+
+### 前置
+
+- Docker Engine / Docker Desktop
+- 推荐 `docker compose`
+- 镜像目标架构：**linux/amd64**
+
+### 本地构建
+
+```bash
+docker build -t windsurf-to-api-go .
+```
+
+### 直接运行
+
+```bash
+mkdir -p .docker-data
+
+docker run -d \
+  --name windsurfapi \
+  --platform=linux/amd64 \
+  -p 3003:3003 \
+  --env-file .env \
+  -v "$(pwd)/.docker-data:/data" \
+  -v windsurf-ls-data:/opt/windsurf/data \
+  -v windsurf-workspace:/tmp/windsurf-workspace \
+  ghcr.io/wuhao1477/windsurf-to-api-go:latest
+```
+
+### Compose 运行
+
+仓库根目录已提供 [compose.yml](/Users/wuhao/Developer/Temp/Windsurf_To_API_Go/compose.yml)：
+
+```bash
+mkdir -p .docker-data
+docker compose up -d --build
+```
+
+### 容器内路径
+
+- `/data`：账号池、代理配置、运行时配置、统计、日志
+- `/opt/windsurf/data`：Windsurf Language Server 运行数据
+- `/tmp/windsurf-workspace`：临时工作区
 
 ## 首次添加账号
 

@@ -1,0 +1,19 @@
+services:
+  windsurfapi:
+    build:
+      context: .
+    image: ghcr.io/wuhao1477/windsurf-to-api-go:latest
+    platform: linux/amd64
+    env_file:
+      - .env
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./.docker-data:/data
+      - windsurf-ls-data:/opt/windsurf/data
+      - windsurf-workspace:/tmp/windsurf-workspace
+    restart: unless-stopped
+
+volumes:
+  windsurf-ls-data:
+  windsurf-workspace:

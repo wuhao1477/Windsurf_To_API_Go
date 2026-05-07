@@ -2,6 +2,12 @@
 
 本文档描述标准 Linux systemd 部署。其它进程管理器（PM2、supervisord、OpenRC）同理。
 
+若你更偏向容器化部署，仓库已提供：
+
+- [Dockerfile](/Users/wuhao/Developer/Temp/Windsurf_To_API_Go/Dockerfile)
+- [compose.yml](/Users/wuhao/Developer/Temp/Windsurf_To_API_Go/compose.yml)
+- [docker workflow](/Users/wuhao/Developer/Temp/Windsurf_To_API_Go/.github/workflows/docker.yml)
+
 ## 推荐布局
 
 ```
@@ -17,6 +23,42 @@
 ├── stats.json                    # 运行时生成
 └── logs/                         # JSONL 日志
 ```
+
+## Docker 部署
+
+镜像发布到 GitHub Container Registry：
+
+```text
+ghcr.io/wuhao1477/windsurf-to-api-go
+```
+
+拉取并运行：
+
+```bash
+mkdir -p .docker-data
+
+docker run -d \
+  --name windsurfapi \
+  --restart unless-stopped \
+  --platform=linux/amd64 \
+  -p 3003:3003 \
+  --env-file .env \
+  -v $(pwd)/.docker-data:/data \
+  -v windsurf-ls-data:/opt/windsurf/data \
+  -v windsurf-workspace:/tmp/windsurf-workspace \
+  ghcr.io/wuhao1477/windsurf-to-api-go:latest
+```
+
+或者：
+
+```bash
+docker compose up -d
+```
+
+容器化时建议至少持久化：
+
+- `/data`
+- `/opt/windsurf/data`
 
 ## 创建专用用户
 
