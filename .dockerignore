@@ -19,6 +19,9 @@ model-access.json
 docs
 audit
 scripts
+!scripts/
+!scripts/docker/
+!scripts/docker/fetch-language-server.sh
 bugsy
 windsurf-api
 codeium.zip
