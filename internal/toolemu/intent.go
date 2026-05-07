@@ -225,7 +225,7 @@ func indexTools(tools []Tool) toolIndex {
 var reExplicit = regexp.MustCompile(
 	`(?:function_call:\s*)?` +
 		`([A-Za-z_][A-Za-z0-9_]{1,64})` + // tool name (≤64 chars)
-		`\s*\(([^)]{0,2000})\)`)
+		`\s*\(([^)]*)\)`)
 
 func extractExplicitSyntax(text string, idx toolIndex) []IntentExtraction {
 	matches := reExplicit.FindAllStringSubmatch(text, -1)
@@ -297,7 +297,7 @@ var reBacktickName = regexp.MustCompile("`([A-Za-z_][A-Za-z0-9_]{1,64})`")
 // reBacktickArg matches `key` `value` or `key`: `value`. Used after the
 // name to harvest argument pairs in the same sentence.
 var reBacktickArg = regexp.MustCompile(
-	"`([A-Za-z_][A-Za-z0-9_]{0,32})`\\s*[:=]?\\s*`([^`]{1,500})`")
+	"`([A-Za-z_][A-Za-z0-9_]{0,32})`\\s*[:=]?\\s*`([^`]+)`")
 
 func extractBacktickQuoted(text string, idx toolIndex) []IntentExtraction {
 	matches := reBacktickName.FindAllStringSubmatchIndex(text, -1)
@@ -358,7 +358,7 @@ var reNarrative = regexp.MustCompile(
 		`(?:\s+(?:function|tool|command))?` +
 		`(?:\s+(?:with|using|on|to)\s+` +
 		`(?:the\s+)?(?:command|argument|param|input|value|file|query|path|args)\s*` +
-		`['"]([^'"]{1,500})['"]` +
+		`['"]([^'"]+)['"]` +
 		`)?`)
 
 func extractNarrative(text string, idx toolIndex) []IntentExtraction {

@@ -61,7 +61,7 @@ type file struct {
 // injection-detector keywords ("ignore", "NEVER", "override", "CRITICAL")
 // and leaves the user an explicit escape hatch, so it doesn't stack into
 // an anti-injection trip the way a persona-hijack prompt would.
-const DefaultResponseLanguagePrompt = "Respond in Simplified Chinese (简体中文) by default. If the user writes in another language or explicitly asks for a specific language, follow the user's lead."
+const DefaultResponseLanguagePrompt = "Respond in Vietnamese by default. If the user writes in another language or explicitly asks for a specific language, follow the user's lead."
 
 var (
 	mu    sync.RWMutex

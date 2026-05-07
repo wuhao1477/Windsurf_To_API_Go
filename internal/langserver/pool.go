@@ -383,7 +383,8 @@ func (p *Pool) Ensure(ctx context.Context, px *Proxy) (*Entry, error) {
 	}
 	p.mu.Unlock()
 
-	dataDir := fmt.Sprintf("/opt/windsurf/data/%s", key)
+	// Use local workspace directory instead of /opt/windsurf/data
+	dataDir := fmt.Sprintf("./windsurf-workspace/%s", key)
 	_ = os.MkdirAll(dataDir+"/db", 0o755)
 
 	args := []string{
@@ -405,7 +406,12 @@ func (p *Pool) Ensure(ctx context.Context, px *Proxy) (*Entry, error) {
 	// Ensure returns). The LS should outlive the spawn ctx and live for the
 	// lifetime of the pool — StopAll() signals termination explicitly.
 	cmd := exec.Command(p.binary, args...)
-	env := append(os.Environ(), "HOME=/root")
+	// Use actual user home instead of hardcoded /root
+	homeDir := os.Getenv("HOME")
+	if homeDir == "" {
+		homeDir = "/tmp"
+	}
+	env := append(os.Environ(), "HOME="+homeDir)
 	if pu := proxyURL(px); pu != "" {
 		env = append(env, "HTTPS_PROXY="+pu, "HTTP_PROXY="+pu, "https_proxy="+pu, "http_proxy="+pu)
 	}
